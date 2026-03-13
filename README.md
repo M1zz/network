@@ -2,6 +2,8 @@
 
 > **Stage 5 · 🛵 서버 데이터가 필요하다**
 
+🔗 **GitHub Pages**: [https://m1zz.github.io/network/](https://m1zz.github.io/network/)
+
 ## 디렉토리 구조
 
 ```
