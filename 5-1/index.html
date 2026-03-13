@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5-1 HTTP와 REST API — Network</title>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+.lesson-hero {
+  padding: 44px 0 36px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 40px;
+}
+
+.lesson-hero-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.lesson-title {
+  font-family: var(--display);
+  font-size: clamp(26px, 4vw, 40px);
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.lesson-question {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  padding: 10px 14px;
+  background: var(--surface2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 4px 4px 0;
+  max-width: 520px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.why-box {
+  background: var(--blue-light);
+  border: 1px solid rgba(26,86,219,.15);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-bottom: 36px;
+}
+
+.why-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--blue);
+  margin-bottom: 6px;
+}
+
+.why-text {
+  font-size: 13px;
+  color: #1e3a8a;
+  line-height: 1.7;
+}
+
+/* Topic sections */
+.topic-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.accordion-trigger {
+  width: 100%;
+  padding: 18px 22px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  transition: background .15s;
+}
+
+.accordion-trigger:hover { background: var(--surface2); }
+
+.accordion-icon {
+  font-family: var(--mono);
+  font-size: 16px;
+  color: var(--text-dim);
+  min-width: 18px;
+  text-align: center;
+  font-weight: 700;
+  transition: color .2s;
+}
+
+.accordion-item.open .accordion-icon { color: var(--accent); }
+
+.accordion-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  min-width: 20px;
+}
+
+.accordion-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  flex: 1;
+}
+
+.accordion-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  background: var(--surface2);
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.accordion-body {
+  display: none;
+  padding: 4px 22px 18px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.accordion-item.open .accordion-body { display: block; }
+
+.topics-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 6px;
+  margin-top: 14px;
+}
+
+@media (max-width: 560px) { .topics-list { grid-template-columns: 1fr; } }
+
+/* Quiz block */
+.quiz-block {
+  margin-bottom: 48px;
+}
+
+footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-text {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<nav class="topbar">
+  <a class="topbar-brand" href="../index.html">
+    <span class="dot"></span>개발자리 iOS Roadmap
+  </a>
+  <div class="breadcrumb">
+    <a href="../index.html">Network</a>
+    <span class="sep">/</span>
+    <span class="current">5-1 HTTP와 REST API</span>
+  </div>
+  <div class="prog-mini">
+    <div class="prog-mini-track">
+      <div class="prog-mini-fill" style="width:0%"></div>
+    </div>
+    <span class="prog-mini-label">0/19</span>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="lesson-hero animate-in">
+    <div class="lesson-hero-top">
+      <span class="badge badge-accent">5-1</span>
+      <span class="badge badge-dim">19 topics</span>
+      <span class="badge badge-dim">📡 HTTP · URLSession · Codable</span>
+    </div>
+    <h1 class="lesson-title">HTTP와 REST API</h1>
+    <div class="lesson-question">
+      💡 URLSession이 왜 이렇게 복잡하게 생겼습니까
+    </div>
+    <p style="font-size:13px; color:var(--text-mid); max-width:540px; line-height:1.7;">
+      로컬을 넘어 서버가 필요해졌습니다. URLSession의 모든 설계 결정은 HTTP를 알아야 납득됩니다. 도구 전에 프로토콜입니다.
+    </p>
+  </div>
+
+  <!-- WHY -->
+  <div class="why-box animate-in">
+    <div class="why-label">💡 왜 여기서?</div>
+    <div class="why-text">URLSession의 모든 설계 결정 — 왜 async/await인가, 왜 URLRequest가 별도 객체인가 — 은 HTTP를 알아야 납득됩니다. 도구 전에 프로토콜입니다.</div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="prog-bar-wrap animate-in" style="margin-bottom:36px;">
+    <div class="prog-meta">
+      <span class="prog-label">TOPICS COMPLETED</span>
+      <span class="prog-num" id="prog-num">0 / 19</span>
+    </div>
+    <div class="prog-track">
+      <div class="prog-fill" id="prog-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- TOPICS -->
+  <div class="section-label">Topics</div>
+
+  <!-- Group 1 -->
+  <div class="topic-section accordion-item open animate-in">
+    <button class="accordion-trigger">
+      <span class="accordion-icon">−</span>
+      <span class="accordion-title">🌐 HTTP 완전 분석</span>
+      <span class="accordion-count">5 topics</span>
+    </button>
+    <div class="accordion-body">
+      <div class="topics-list">
+        <div class="topic-item" data-id="http-1"><span class="topic-check-box"></span>요청 구조 — Method, URL, Headers, Body</div>
+        <div class="topic-item" data-id="http-2"><span class="topic-check-box"></span>GET/POST/PUT/DELETE/PATCH 각각의 의미</div>
+        <div class="topic-item" data-id="http-3"><span class="topic-check-box"></span>상태 코드 — 200, 201, 400, 401, 403, 404, 500</div>
+        <div class="topic-item" data-id="http-4"><span class="topic-check-box"></span>RESTful 설계 — 리소스 기반 URL 설계 원칙</div>
+        <div class="topic-item" data-id="http-5"><span class="topic-check-box"></span>HTTP/2 vs HTTP/3 — iOS URLSession 활용</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Group 2 -->
+  <div class="topic-section accordion-item animate-in" style="animation-delay:.05s">
+    <button class="accordion-trigger">
+      <span class="accordion-icon">+</span>
+      <span class="accordion-title">⚡ URLSession 심화</span>
+      <span class="accordion-count">5 topics</span>
+    </button>
+    <div class="accordion-body">
+      <div class="topics-list">
+        <div class="topic-item" data-id="url-1"><span class="topic-check-box"></span>URLRequest — Method, Headers, Body 설정</div>
+        <div class="topic-item" data-id="url-2"><span class="topic-check-box"></span>DataTask, DownloadTask, UploadTask — 언제 무엇을</div>
+        <div class="topic-item" data-id="url-3"><span class="topic-check-box"></span>Background Session — 앱 종료 후 완료되는 다운로드</div>
+        <div class="topic-item" data-id="url-4"><span class="topic-check-box"></span>URLCache — 응답 캐싱 전략</div>
+        <div class="topic-item" data-id="url-5"><span class="topic-check-box"></span>async/await + URLSession — 현대적 네트워크 코드</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Group 3 -->
+  <div class="topic-section accordion-item animate-in" style="animation-delay:.1s">
+    <button class="accordion-trigger">
+      <span class="accordion-icon">+</span>
+      <span class="accordion-title">🔄 JSON 파싱</span>
+      <span class="accordion-count">5 topics</span>
+    </button>
+    <div class="accordion-body">
+      <div class="topics-list">
+        <div class="topic-item" data-id="json-1"><span class="topic-check-box"></span>Codable = Encodable + Decodable</div>
+        <div class="topic-item" data-id="json-2"><span class="topic-check-box"></span>CodingKeys — JSON 키와 프로퍼티명 다를 때</div>
+        <div class="topic-item" data-id="json-3"><span class="topic-check-box"></span>Nested JSON — 중첩 구조 처리</div>
+        <div class="topic-item" data-id="json-4"><span class="topic-check-box"></span>API 에러 응답 파싱 — 성공/실패 분기</div>
+        <div class="topic-item" data-id="json-5"><span class="topic-check-box"></span>Custom Decoder — 복잡한 변환 직접 처리</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Group 4 -->
+  <div class="topic-section accordion-item animate-in" style="animation-delay:.15s; margin-bottom:40px;">
+    <button class="accordion-trigger">
+      <span class="accordion-icon">+</span>
+      <span class="accordion-title">🏗 네트워크 레이어 설계</span>
+      <span class="accordion-count">4 topics</span>
+    </button>
+    <div class="accordion-body">
+      <div class="topics-list">
+        <div class="topic-item" data-id="layer-1"><span class="topic-check-box"></span>API Client Protocol — 테스트 시 Mock으로 교체</div>
+        <div class="topic-item" data-id="layer-2"><span class="topic-check-box"></span>Endpoint enum — URL 조합을 타입 안전하게</div>
+        <div class="topic-item" data-id="layer-3"><span class="topic-check-box"></span>Interceptor — 공통 헤더, 토큰 자동 갱신</div>
+        <div class="topic-item" data-id="layer-4"><span class="topic-check-box"></span>Retry 로직 — 실패 시 재시도 전략</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="section-label">Quiz</div>
+  <div class="quiz-block animate-in">
+    <div class="quiz-wrap">
+      <div class="quiz-header">
+        <span class="badge badge-accent">📡 5-1</span>
+        <span style="font-family:var(--mono);font-size:12px;color:var(--text-mid);">HTTP와 REST API</span>
+      </div>
+      <div class="quiz-body">
+        <div class="quiz-situation">
+          💡 실전 상황: 서버에서 사용자 목록을 가져옵니다.<br>네트워크 요청을 어떻게 작성하시겠습니까?
+        </div>
+        <div class="quiz-q">가장 적절한 방식은?</div>
+        <div class="quiz-options" data-quiz-id="q1">
+          <button class="quiz-opt" data-correct="false">
+            <div class="quiz-opt-letter">OPTION A</div>
+            <div class="quiz-opt-title">동기 방식</div>
+            <div class="quiz-opt-hint">메인 스레드에서 직접 호출</div>
+          </button>
+          <button class="quiz-opt" data-correct="true">
+            <div class="quiz-opt-letter">OPTION B</div>
+            <div class="quiz-opt-title">async/await 비동기</div>
+            <div class="quiz-opt-hint">UI 블로킹 없이 비동기 처리</div>
+          </button>
+        </div>
+        <div class="quiz-feedback" id="fb-q1"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV BUTTONS -->
+  <div style="display:flex; justify-content:space-between; margin-bottom:48px; gap:12px; flex-wrap:wrap;">
+    <a class="btn btn-outline" href="../index.html">← Network 홈</a>
+    <a class="btn btn-primary" href="../5-2/index.html">5-2 데이터 영속성 →</a>
+  </div>
+
+  <footer>
+    <span class="footer-text">개발자리 iOS Roadmap · Network · 5-1</span>
+    <span class="footer-text">19 topics</span>
+  </footer>
+
+</div>
+
+<script src="../assets/script.js"></script>
+</body>
+</html>

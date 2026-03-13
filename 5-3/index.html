@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5-3 네트워크 보안 — Network</title>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+.lesson-hero {
+  padding: 44px 0 36px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 40px;
+}
+
+.lesson-hero-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.lesson-title {
+  font-family: var(--display);
+  font-size: clamp(26px, 4vw, 40px);
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.lesson-question {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  padding: 10px 14px;
+  background: var(--surface2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 4px 4px 0;
+  max-width: 520px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.why-box {
+  background: var(--blue-light);
+  border: 1px solid rgba(26,86,219,.15);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-bottom: 36px;
+}
+
+.why-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--blue);
+  margin-bottom: 6px;
+}
+
+.why-text {
+  font-size: 13px;
+  color: #1e3a8a;
+  line-height: 1.7;
+}
+
+.topic-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.accordion-trigger {
+  width: 100%;
+  padding: 18px 22px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  transition: background .15s;
+}
+
+.accordion-trigger:hover { background: var(--surface2); }
+
+.accordion-icon {
+  font-family: var(--mono);
+  font-size: 16px;
+  color: var(--text-dim);
+  min-width: 18px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.accordion-item.open .accordion-icon { color: var(--accent); }
+
+.accordion-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  flex: 1;
+}
+
+.accordion-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  background: var(--surface2);
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.accordion-body {
+  display: none;
+  padding: 4px 22px 18px;
+  border-top: 1px solid var(--border);
+}
+
+.accordion-item.open .accordion-body { display: block; }
+
+.topics-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 6px;
+  margin-top: 14px;
+}
+
+@media (max-width: 560px) { .topics-list { grid-template-columns: 1fr; } }
+
+/* Warning callout */
+.warning-callout {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--red-light);
+  border: 1px solid rgba(159,18,57,.15);
+  border-radius: 5px;
+  margin-top: 14px;
+  font-size: 12px;
+  color: #881337;
+  line-height: 1.6;
+}
+
+footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-text {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}
+
+/* Stage complete banner */
+.complete-banner {
+  background: linear-gradient(135deg, #fdf0ea 0%, #fff7ed 100%);
+  border: 1.5px solid rgba(200,75,14,.25);
+  border-radius: var(--radius);
+  padding: 28px;
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.complete-banner-emoji { font-size: 40px; margin-bottom: 10px; }
+.complete-banner-title {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.complete-banner-desc {
+  font-size: 13px;
+  color: var(--text-mid);
+  margin-bottom: 18px;
+  line-height: 1.7;
+}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a class="topbar-brand" href="../index.html">
+    <span class="dot"></span>개발자리 iOS Roadmap
+  </a>
+  <div class="breadcrumb">
+    <a href="../index.html">Network</a>
+    <span class="sep">/</span>
+    <span class="current">5-3 네트워크 보안</span>
+  </div>
+  <div class="prog-mini">
+    <div class="prog-mini-track">
+      <div class="prog-mini-fill" style="width:0%"></div>
+    </div>
+    <span class="prog-mini-label">0/11</span>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="lesson-hero animate-in">
+    <div class="lesson-hero-top">
+      <span class="badge badge-accent">5-3</span>
+      <span class="badge badge-dim">11 topics</span>
+      <span class="badge badge-dim">🔐 TLS · OAuth · CryptoKit</span>
+    </div>
+    <h1 class="lesson-title">네트워크 보안</h1>
+    <div class="lesson-question">
+      💡 HTTPS인데 왜 해킹당할 수 있습니까 / 토큰을 어디에 저장해야 합니까
+    </div>
+    <p style="font-size:13px; color:var(--text-mid); max-width:540px; line-height:1.7;">
+      데이터를 주고받고 저장할 줄 압니다. 이제 "이게 안전한가?"가 반드시 따라옵니다. 보안은 기능이 완성된 직후 배워야 의미가 있습니다 — 지킬 것이 생겼을 때 잠금장치를 배웁니다.
+    </p>
+  </div>
+
+  <div class="why-box animate-in">
+    <div class="why-label">💡 왜 여기서?</div>
+    <div class="why-text">보안은 기능 개발과 동시에 배우는 것이 아니라 기능이 완성된 직후 배워야 의미가 있습니다. 지킬 것이 생겼을 때 잠금장치를 배웁니다.</div>
+  </div>
+
+  <div class="prog-bar-wrap animate-in" style="margin-bottom:36px;">
+    <div class="prog-meta">
+      <span class="prog-label">TOPICS COMPLETED</span>
+      <span class="prog-num" id="prog-num">0 / 11</span>
+    </div>
+    <div class="prog-track">
+      <div class="prog-fill" id="prog-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div class="section-label">Topics</div>
+
+  <!-- Group 1: HTTPS/TLS -->
+  <div class="topic-section accordion-item open animate-in">
+    <button class="accordion-trigger">
+      <span class="accordion-icon">−</span>
+      <span class="accordion-title">🔒 HTTPS와 TLS</span>
+      <span class="accordion-count">4 topics</span>
+    </button>
+    <div class="accordion-body">
+      <div class="topics-list">
+        <div class="topic-item" data-id="tls-1"><span class="topic-check-box"></span>TLS 핸드셰이크 — 암호화 키 교환 과정</div>
+        <div class="topic-item" data-id="tls-2"><span class="topic-check-box"></span>인증서와 CA — 서버가 진짜인지 검증</div>
+        <div class="topic-item" data-id="tls-3"><span class="topic-check-box"></span>SSL Pinning — MITM 공격 방어</div>
+        <div class="topic-item" data-id="tls-4"><span class="topic-check-box"></span>App Transport Security — iOS의 강제 HTTPS</div>
+      </div>
+      <div class="warning-callout">
+        <span>⚠️</span>
+        <span>HTTPS가 있어도 SSL Pinning 없이는 MITM(중간자 공격)에 취약합니다. 특히 Charles Proxy 같은 도구로 트래픽을 가로챌 수 있습니다.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Group 2: Auth -->
+  <div class="topic-section accordion-item animate-in" style="animation-delay:.05s">
+    <button class="accordion-trigger">
+      <span class="accordion-icon">+</span>
+      <span class="accordion-title">👤 인증 구현</span>
+      <span class="accordion-count">4 topics</span>
+    </button>
+    <div class="accordion-body">
+      <div class="topics-list">
+        <div class="topic-item" data-id="auth-1"><span class="topic-check-box"></span>OAuth 2.0 — 소셜 로그인 플로우</div>
+        <div class="topic-item" data-id="auth-2"><span class="topic-check-box"></span>JWT — 토큰 구조, Access + Refresh 패턴</div>
+        <div class="topic-item" data-id="auth-3"><span class="topic-check-box"></span>Keychain에 토큰 저장</div>
+        <div class="topic-item" data-id="auth-4"><span class="topic-check-box"></span>Face ID / Touch ID — LocalAuthentication</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Group 3: Crypto -->
+  <div class="topic-section accordion-item animate-in" style="animation-delay:.1s; margin-bottom:40px;">
+    <button class="accordion-trigger">
+      <span class="accordion-icon">+</span>
+      <span class="accordion-title">🔑 암호화 기초</span>
+      <span class="accordion-count">3 topics</span>
+    </button>
+    <div class="accordion-body">
+      <div class="topics-list">
+        <div class="topic-item" data-id="crypto-1"><span class="topic-check-box"></span>대칭키(AES), 비대칭키(RSA), 해시(SHA-256)</div>
+        <div class="topic-item" data-id="crypto-2"><span class="topic-check-box"></span>CryptoKit — Swift 암호화 구현</div>
+        <div class="topic-item" data-id="crypto-3"><span class="topic-check-box"></span>API Key 코드 하드코딩 금지 — xcconfig 분리</div>
+      </div>
+      <div class="warning-callout">
+        <span>🚨</span>
+        <span>API Key를 코드에 하드코딩하면 GitHub에 push하는 순간 전 세계에 노출됩니다. 반드시 xcconfig 또는 환경변수로 분리하고 .gitignore에 추가하세요.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="section-label">Quiz</div>
+  <div style="margin-bottom:40px;" class="animate-in">
+    <div class="quiz-wrap">
+      <div class="quiz-header">
+        <span class="badge badge-accent">🔐 5-3</span>
+        <span style="font-family:var(--mono);font-size:12px;color:var(--text-mid);">네트워크 보안</span>
+      </div>
+      <div class="quiz-body">
+        <div class="quiz-situation">
+          💡 실전 상황: 외부 API를 사용합니다.<br>API Key를 어디에 두시겠습니까?
+        </div>
+        <div class="quiz-q">안전한 방법은?</div>
+        <div class="quiz-options" data-quiz-id="q1">
+          <button class="quiz-opt" data-correct="false">
+            <div class="quiz-opt-letter">OPTION A</div>
+            <div class="quiz-opt-title">코드에 하드코딩</div>
+            <div class="quiz-opt-hint">GitHub에 올리면 전 세계에 노출</div>
+          </button>
+          <button class="quiz-opt" data-correct="true">
+            <div class="quiz-opt-letter">OPTION B</div>
+            <div class="quiz-opt-title">xcconfig / 환경변수 분리</div>
+            <div class="quiz-opt-hint">코드에 키가 없음, .gitignore 처리</div>
+          </button>
+        </div>
+        <div class="quiz-feedback" id="fb-q1"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE COMPLETE BANNER -->
+  <div class="complete-banner animate-in">
+    <div class="complete-banner-emoji">🎉</div>
+    <div class="complete-banner-title">Stage 5 완료!</div>
+    <div class="complete-banner-desc">
+      오토바이로 달릴 수 있습니다.<br>
+      하지만 동시에 두 가지를 할 수 없습니다. → STAGE 6에서 해결합니다.
+    </div>
+    <a class="btn btn-primary" href="#">🧊 STAGE 6 동시성 시작하기 →</a>
+  </div>
+
+  <div style="display:flex; justify-content:space-between; margin-bottom:48px; gap:12px; flex-wrap:wrap;">
+    <a class="btn btn-outline" href="../5-2/index.html">← 5-2 데이터 영속성</a>
+    <a class="btn btn-outline" href="../index.html">Network 홈으로</a>
+  </div>
+
+  <footer>
+    <span class="footer-text">개발자리 iOS Roadmap · Network · 5-3</span>
+    <span class="footer-text">11 topics</span>
+  </footer>
+
+</div>
+
+<script src="../assets/script.js"></script>
+</body>
+</html>

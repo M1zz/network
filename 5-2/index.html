@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5-2 데이터 영속성 — Network</title>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+.lesson-hero {
+  padding: 44px 0 36px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 40px;
+}
+
+.lesson-hero-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.lesson-title {
+  font-family: var(--display);
+  font-size: clamp(26px, 4vw, 40px);
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.lesson-question {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  padding: 10px 14px;
+  background: var(--surface2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 4px 4px 0;
+  max-width: 520px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.why-box {
+  background: var(--blue-light);
+  border: 1px solid rgba(26,86,219,.15);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-bottom: 36px;
+}
+
+.why-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--blue);
+  margin-bottom: 6px;
+}
+
+.why-text {
+  font-size: 13px;
+  color: #1e3a8a;
+  line-height: 1.7;
+}
+
+.topic-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.accordion-trigger {
+  width: 100%;
+  padding: 18px 22px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  transition: background .15s;
+}
+
+.accordion-trigger:hover { background: var(--surface2); }
+
+.accordion-icon {
+  font-family: var(--mono);
+  font-size: 16px;
+  color: var(--text-dim);
+  min-width: 18px;
+  text-align: center;
+  font-weight: 700;
+  transition: color .2s;
+}
+
+.accordion-item.open .accordion-icon { color: var(--accent); }
+
+.accordion-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  flex: 1;
+}
+
+.accordion-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  background: var(--surface2);
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.accordion-body {
+  display: none;
+  padding: 4px 22px 18px;
+  border-top: 1px solid var(--border);
+}
+
+.accordion-item.open .accordion-body { display: block; }
+
+.topics-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 6px;
+  margin-top: 14px;
+}
+
+@media (max-width: 560px) { .topics-list { grid-template-columns: 1fr; } }
+
+/* Storage choice table */
+.storage-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-top: 14px;
+  margin-bottom: 4px;
+}
+
+.storage-table th {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+
+.storage-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-mid);
+  vertical-align: top;
+}
+
+.storage-table tr:last-child td { border-bottom: none; }
+.storage-table tr:hover td { background: var(--surface2); }
+
+footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-text {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a class="topbar-brand" href="../index.html">
+    <span class="dot"></span>개발자리 iOS Roadmap
+  </a>
+  <div class="breadcrumb">
+    <a href="../index.html">Network</a>
+    <span class="sep">/</span>
+    <span class="current">5-2 데이터 영속성</span>
+  </div>
+  <div class="prog-mini">
+    <div class="prog-mini-track">
+      <div class="prog-mini-fill" style="width:0%"></div>
+    </div>
+    <span class="prog-mini-label">0/18</span>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="lesson-hero animate-in">
+    <div class="lesson-hero-top">
+      <span class="badge badge-accent">5-2</span>
+      <span class="badge badge-dim">18 topics</span>
+      <span class="badge badge-dim">💾 Storage · CoreData · SwiftData</span>
+    </div>
+    <h1 class="lesson-title">데이터 영속성</h1>
+    <div class="lesson-question">
+      💡 앱을 껐다 켜도 데이터가 살아있게 하고 싶습니다
+    </div>
+    <p style="font-size:13px; color:var(--text-mid); max-width:540px; line-height:1.7;">
+      5-1에서 서버에서 데이터를 받았습니다. 자연스러운 다음 질문 — "앱을 껐다 켜도 남아있게 하려면?" 받아온 데이터를 어디에 어떻게 저장하는가가 앱의 신뢰성을 결정합니다.
+    </p>
+  </div>
+
+  <div class="why-box animate-in">
+    <div class="why-label">💡 왜 여기서?</div>
+    <div class="why-text">네트워크와 영속성은 항상 세트입니다. 받아온 데이터를 어디에 어떻게 저장하는가가 앱의 신뢰성을 결정합니다.</div>
+  </div>
+
+  <div class="prog-bar-wrap animate-in" style="margin-bottom:36px;">
+    <div class="prog-meta">
+      <span class="prog-label">TOPICS COMPLETED</span>
+      <span class="prog-num" id="prog-num">0 / 18</span>
+    </div>
+    <div class="prog-track">
+      <div class="prog-fill" id="prog-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div class="section-label">Topics</div>
+
+  <!-- Group 1: Storage choice -->
+  <div class="topic-section accordion-item open animate-in">
+    <button class="accordion-trigger">
+      <span class="accordion-icon">−</span>
+      <span class="accordion-title">📦 저장소 선택 기준</span>
+      <span class="accordion-count">4 topics</span>
+    </button>
+    <div class="accordion-body">
+      <table class="storage-table">
+        <thead>
+          <tr><th>저장소</th><th>용도</th><th>보안</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>UserDefaults</strong></td><td>소량 설정값, Codable 타입</td><td>낮음</td></tr>
+          <tr><td><strong>Keychain</strong></td><td>패스워드, 토큰, 민감 정보</td><td>높음 (HW)</td></tr>
+          <tr><td><strong>FileManager</strong></td><td>이미지, 문서, 바이너리</td><td>중간</td></tr>
+        </tbody>
+      </table>
+      <div class="topics-list" style="margin-top:10px;">
+        <div class="topic-item" data-id="store-1"><span class="topic-check-box"></span>UserDefaults — 소량 설정값, Codable 커스텀 타입</div>
+        <div class="topic-item" data-id="store-2"><span class="topic-check-box"></span>Keychain — 패스워드, 토큰 등 민감한 정보</div>
+        <div class="topic-item" data-id="store-3"><span class="topic-check-box"></span>FileManager — 이미지, 문서, 바이너리</div>
+        <div class="topic-item" data-id="store-4"><span class="topic-check-box"></span>크기 / 보안 / 동기화 필요 여부 — 선택 기준</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Group 2: SQL -->
+  <div class="topic-section accordion-item animate-in" style="animation-delay:.05s">
+    <button class="accordion-trigger">
+      <span class="accordion-icon">+</span>
+      <span class="accordion-title">🗄 SQL 기초</span>
+      <span class="accordion-count">5 topics</span>
+    </button>
+    <div class="accordion-body">
+      <div class="topics-list">
+        <div class="topic-item" data-id="sql-1"><span class="topic-check-box"></span>SELECT, INSERT, UPDATE, DELETE</div>
+        <div class="topic-item" data-id="sql-2"><span class="topic-check-box"></span>WHERE, ORDER BY, LIMIT</div>
+        <div class="topic-item" data-id="sql-3"><span class="topic-check-box"></span>JOIN — 관계 있는 테이블 연결</div>
+        <div class="topic-item" data-id="sql-4"><span class="topic-check-box"></span>INDEX — B-Tree 인덱스, 쿼리 속도 향상 원리</div>
+        <div class="topic-item" data-id="sql-5"><span class="topic-check-box"></span>GRDB — Swift에서 SQLite 직접 다루기</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Group 3: Core Data & SwiftData -->
+  <div class="topic-section accordion-item animate-in" style="animation-delay:.1s">
+    <button class="accordion-trigger">
+      <span class="accordion-icon">+</span>
+      <span class="accordion-title">🍎 Core Data & SwiftData</span>
+      <span class="accordion-count">5 topics</span>
+    </button>
+    <div class="accordion-body">
+      <div class="topics-list">
+        <div class="topic-item" data-id="cd-1"><span class="topic-check-box"></span>Entity, Attribute, Relationship 설계</div>
+        <div class="topic-item" data-id="cd-2"><span class="topic-check-box"></span>NSFetchRequest + Predicate 조건 조회</div>
+        <div class="topic-item" data-id="cd-3"><span class="topic-check-box"></span>SwiftData — @Model, @Query (iOS 17+)</div>
+        <div class="topic-item" data-id="cd-4"><span class="topic-check-box"></span>Migration — 스키마 변경 시 데이터 유지</div>
+        <div class="topic-item" data-id="cd-5"><span class="topic-check-box"></span>Core Data vs SwiftData 선택 기준</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Group 4: Cloud sync -->
+  <div class="topic-section accordion-item animate-in" style="animation-delay:.15s; margin-bottom:40px;">
+    <button class="accordion-trigger">
+      <span class="accordion-icon">+</span>
+      <span class="accordion-title">☁️ 클라우드 동기화</span>
+      <span class="accordion-count">4 topics</span>
+    </button>
+    <div class="accordion-body">
+      <div class="topics-list">
+        <div class="topic-item" data-id="cloud-1"><span class="topic-check-box"></span>CloudKit — iCloud 연동</div>
+        <div class="topic-item" data-id="cloud-2"><span class="topic-check-box"></span>Firebase Firestore — 실시간 동기화</div>
+        <div class="topic-item" data-id="cloud-3"><span class="topic-check-box"></span>오프라인 우선 — Local First 패턴</div>
+        <div class="topic-item" data-id="cloud-4"><span class="topic-check-box"></span>충돌 해결 전략</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="section-label">Quiz</div>
+  <div style="margin-bottom:48px;" class="animate-in">
+    <div class="quiz-wrap">
+      <div class="quiz-header">
+        <span class="badge badge-accent">💾 5-2</span>
+        <span style="font-family:var(--mono);font-size:12px;color:var(--text-mid);">데이터 영속성</span>
+      </div>
+      <div class="quiz-body">
+        <div class="quiz-situation">
+          💡 실전 상황: 사용자의 로그인 토큰을 저장해야 합니다.<br>어디에 저장하시겠습니까?
+        </div>
+        <div class="quiz-q">올바른 저장소는?</div>
+        <div class="quiz-options" data-quiz-id="q1">
+          <button class="quiz-opt" data-correct="false">
+            <div class="quiz-opt-letter">OPTION A</div>
+            <div class="quiz-opt-title">UserDefaults</div>
+            <div class="quiz-opt-hint">암호화 없이 평문 저장, 탈옥 시 노출</div>
+          </button>
+          <button class="quiz-opt" data-correct="true">
+            <div class="quiz-opt-letter">OPTION B</div>
+            <div class="quiz-opt-title">Keychain</div>
+            <div class="quiz-opt-hint">하드웨어 암호화, iOS가 보호</div>
+          </button>
+        </div>
+        <div class="quiz-feedback" id="fb-q1"></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex; justify-content:space-between; margin-bottom:48px; gap:12px; flex-wrap:wrap;">
+    <a class="btn btn-outline" href="../5-1/index.html">← 5-1 HTTP와 REST API</a>
+    <a class="btn btn-primary" href="../5-3/index.html">5-3 네트워크 보안 →</a>
+  </div>
+
+  <footer>
+    <span class="footer-text">개발자리 iOS Roadmap · Network · 5-2</span>
+    <span class="footer-text">18 topics</span>
+  </footer>
+
+</div>
+
+<script src="../assets/script.js"></script>
+</body>
+</html>

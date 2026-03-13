@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Network — 개발자리 iOS Roadmap</title>
+<link rel="stylesheet" href="./assets/style.css">
+<style>
+/* ─── PAGE-SPECIFIC ────────────────────────────────────────── */
+.hero {
+  padding: 56px 0 48px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 48px;
+}
+
+.category-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-light);
+  border: 1px solid rgba(200,75,14,.2);
+  border-radius: 3px;
+  padding: 4px 10px;
+  margin-bottom: 20px;
+}
+
+.hero-title {
+  font-family: var(--display);
+  font-size: clamp(36px, 6vw, 64px);
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 14px;
+}
+
+.hero-title em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.hero-desc {
+  font-size: 15px;
+  color: var(--text-mid);
+  max-width: 520px;
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Stage navigator */
+.stage-nav {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+
+.stage-pill {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 5px 10px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+  cursor: default;
+  transition: all .2s;
+}
+
+.stage-pill.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(200,75,14,.3);
+}
+
+/* Overview two-col */
+.overview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 48px;
+}
+
+@media (max-width: 640px) { .overview-grid { grid-template-columns: 1fr; } }
+
+.overview-card {
+  padding: 22px;
+  border-radius: var(--radius);
+  border: 1px solid;
+}
+
+.overview-card.can {
+  background: var(--green-light);
+  border-color: rgba(22,101,52,.2);
+}
+
+.overview-card.warn {
+  background: var(--yellow-light);
+  border-color: rgba(133,77,14,.2);
+}
+
+.overview-card-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.overview-card.can .overview-card-label  { color: var(--green); }
+.overview-card.warn .overview-card-label { color: var(--yellow); }
+
+.overview-card p {
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.overview-card.can p  { color: #14532d; }
+.overview-card.warn p { color: #713f12; }
+
+/* Lesson cards */
+.lessons-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 48px;
+}
+
+.lesson-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 26px 28px;
+  text-decoration: none;
+  color: inherit;
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  align-items: center;
+  gap: 20px;
+  transition: all .2s;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.lesson-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transition: transform .25s;
+  transform-origin: bottom;
+}
+
+.lesson-card:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow);
+  transform: translateY(-1px);
+}
+
+.lesson-card:hover::before { transform: scaleY(1); }
+
+.lesson-icon-wrap {
+  width: 48px; height: 48px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.lesson-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+
+.lesson-title {
+  font-family: var(--display);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.lesson-question {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.lesson-topics-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.lesson-topics-count strong {
+  display: block;
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-mid);
+  margin-bottom: 2px;
+}
+
+.lesson-mini-prog {
+  width: 60px;
+  height: 3px;
+  background: var(--surface2);
+  border-radius: 2px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+
+.lesson-mini-prog-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width .4s;
+}
+
+/* Next stage CTA */
+.next-stage {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 48px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.next-stage-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.next-stage-title {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* Footer */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-text {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<nav class="topbar">
+  <a class="topbar-brand" href="./index.html">
+    <span class="dot"></span>개발자리 iOS Roadmap
+  </a>
+  <div class="breadcrumb">
+    <span class="current">Network</span>
+  </div>
+  <div class="prog-mini">
+    <div class="prog-mini-track">
+      <div class="prog-mini-fill" id="mini-fill" style="width:0%"></div>
+    </div>
+    <span class="prog-mini-label">0/30</span>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- HERO -->
+  <section class="hero animate-in">
+    <div class="category-tag">🌐 Category · Network</div>
+    <h1 class="hero-title">서버 데이터가<br><em>필요하다</em></h1>
+    <p class="hero-desc">
+      API를 호출하고, JSON을 파싱하고, 데이터를 안전하게 저장한다.<br>
+      실제 서비스 수준의 iOS 앱을 만들기 위한 필수 기술 스택.
+    </p>
+    <div class="hero-meta">
+      <span class="badge badge-accent">🛵 STAGE 5</span>
+      <span class="badge badge-dim">30 topics</span>
+      <span class="badge badge-dim">3 lessons</span>
+      <span class="badge badge-dim">3 quizzes</span>
+    </div>
+  </section>
+
+  <!-- STAGE ROADMAP -->
+  <div class="stage-nav animate-in">
+    <div class="stage-pill">🛠 S1 도구</div>
+    <div class="stage-pill">🐢 S2 문법</div>
+    <div class="stage-pill">🍝 S3 UI</div>
+    <div class="stage-pill">💀 S4 아키텍처</div>
+    <div class="stage-pill active">🌐 S5 네트워크</div>
+    <div class="stage-pill">🧊 S6 동시성</div>
+    <div class="stage-pill">🧪 S7 테스트</div>
+    <div class="stage-pill">🔭 S8 고급</div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="section-label">Stage Overview</div>
+  <div class="overview-grid animate-in">
+    <div class="overview-card can">
+      <div class="overview-card-label">✅ 이 단계를 마치면</div>
+      <p>서버와 통신하는 앱을 만들 수 있습니다. REST API를 호출하고, JSON을 파싱하고, Core Data에 저장합니다. 로그인, 토큰 관리, HTTPS 보안까지 구현합니다. 실제 서비스 수준의 앱을 만들 수 있는 상태입니다.</p>
+    </div>
+    <div class="overview-card warn">
+      <div class="overview-card-label">⚠️ 하지만 아직</div>
+      <p>네트워크 요청 중 UI가 멈춥니다. 이미지를 여러 장 불러오면 스크롤이 버벅입니다. 메인 스레드가 무엇인지, 왜 async/await을 써야 하는지 정확히 모릅니다. → STAGE 6에서 해결합니다.</p>
+    </div>
+  </div>
+
+  <!-- LESSONS -->
+  <div class="section-label">Lessons</div>
+  <div class="lessons-grid">
+
+    <a class="lesson-card animate-in" href="./5-1/index.html">
+      <div class="lesson-icon-wrap">📡</div>
+      <div>
+        <div class="lesson-num">5-1</div>
+        <div class="lesson-title">HTTP와 REST API</div>
+        <div class="lesson-question">URLSession이 왜 이렇게 복잡하게 생겼습니까</div>
+        <div class="lesson-mini-prog"><div class="lesson-mini-prog-fill" id="fill-5-1" style="width:0%"></div></div>
+      </div>
+      <div class="lesson-topics-count">
+        <strong>19</strong>
+        topics
+      </div>
+    </a>
+
+    <a class="lesson-card animate-in" href="./5-2/index.html" style="animation-delay:.07s">
+      <div class="lesson-icon-wrap">💾</div>
+      <div>
+        <div class="lesson-num">5-2</div>
+        <div class="lesson-title">데이터 영속성</div>
+        <div class="lesson-question">앱을 껐다 켜도 데이터가 살아있게 하고 싶습니다</div>
+        <div class="lesson-mini-prog"><div class="lesson-mini-prog-fill" id="fill-5-2" style="width:0%"></div></div>
+      </div>
+      <div class="lesson-topics-count">
+        <strong>18</strong>
+        topics
+      </div>
+    </a>
+
+    <a class="lesson-card animate-in" href="./5-3/index.html" style="animation-delay:.14s">
+      <div class="lesson-icon-wrap">🔐</div>
+      <div>
+        <div class="lesson-num">5-3</div>
+        <div class="lesson-title">네트워크 보안</div>
+        <div class="lesson-question">HTTPS인데 왜 해킹당할 수 있습니까 / 토큰을 어디에 저장해야 합니까</div>
+        <div class="lesson-mini-prog"><div class="lesson-mini-prog-fill" id="fill-5-3" style="width:0%"></div></div>
+      </div>
+      <div class="lesson-topics-count">
+        <strong>11</strong>
+        topics
+      </div>
+    </a>
+
+  </div>
+
+  <!-- NEXT STAGE -->
+  <div class="next-stage animate-in">
+    <div>
+      <div class="next-stage-label">NEXT STAGE</div>
+      <div class="next-stage-title">🧊 S6 — 동시성 · Concurrency</div>
+    </div>
+    <a class="btn btn-outline" href="#">다음 단계 →</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-text">개발자리 (Devjaeri) · iOS Roadmap · Network</span>
+    <span class="footer-text">Stage 5 of 8</span>
+  </footer>
+
+</div>
+
+<script src="./assets/script.js"></script>
+<script>
+// Index page: load per-lesson progress from localStorage
+document.addEventListener('DOMContentLoaded', () => {
+  const COUNTS = { '5-1': 19, '5-2': 18, '5-3': 11 };
+  const KEY = 'devjaeri_network_progress';
+  let progress = {};
+  try { progress = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch {}
+
+  let totalDone = 0;
+  const total = 48;
+
+  Object.entries(COUNTS).forEach(([lesson, count]) => {
+    const saved = progress[lesson] || {};
+    const done = Object.values(saved).filter(Boolean).length;
+    totalDone += done;
+    const pct = count > 0 ? (done / count) * 100 : 0;
+    const fill = document.getElementById('fill-' + lesson);
+    if (fill) fill.style.width = pct + '%';
+  });
+
+  const miniPct = (totalDone / total) * 100;
+  document.getElementById('mini-fill').style.width = miniPct + '%';
+  document.querySelector('.prog-mini-label').textContent = `${totalDone}/${total}`;
+});
+</script>
+</body>
+</html>
